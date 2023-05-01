@@ -2,8 +2,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CustomAuthenticationForm, UserRegisterForm, UserEditForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.decorators import login_required
 from .models import UserExtra
+from django.urls import reverse_lazy
 
 # Create your views here.
 def login_request(request):
@@ -70,21 +72,6 @@ def profile (request):
         form = UserEditForm (request.POST, request.FILES, instance=request.user)
 
         if form.is_valid():
-            #datos_correctos = form.cleaned_data
-
-            # usuario = User.objects.get(username = request.user)
-            # usuario = get_object_or_404(User, username= request.user.username)
-
-            # descripcion = datos_correctos['descripcion']
-            # web = datos_correctos['web']
-            # avatar = datos_correctos['avatar']
-            
-            # userExtra = UserExtra(user = request.user,
-            #                       descripcion = descripcion,
-            #                       web = web,
-            #                       avatar = avatar)
-            # userExtra.save()
-
             request.user.userextra.web = form.cleaned_data.get('web')
             request.user.userextra.descripcion = form.cleaned_data.get('descripcion')
             if form.cleaned_data.get('avatar'):
@@ -107,3 +94,7 @@ def profile (request):
     form = UserEditForm(initial=extra, instance=request.user)
 
     return render(request, 'profile.html', {'form': form})
+
+class ChangePass(PasswordChangeView):
+    template_name = 'change_pass.html'
+    success_url = reverse_lazy('profile')

@@ -41,7 +41,7 @@
         {% if request.user.userextra.avatar %}
             <img src="{{ request.user.userextra.avatar.url }}" style=""/>
         {% endif %}
-        <h5>Hola <strong>{{ user.username }}</strong></h5>
+        <h5>Hola <strong>{% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</strong></h5>
     {% endif %}
 </a>
 

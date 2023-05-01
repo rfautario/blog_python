@@ -2,7 +2,7 @@
 Se deberá ingresar a la siguiente dirección: [127.0.0.1:8000/](http://127.0.0.1:8000/)
 La cual mostrará la página inicial de la web
 
-Vinculo para la demo: https://youtu.be/rAD3C_bGaTE
+Vínculo para la demo: https://youtu.be/rAD3C_bGaTE
 
 ## NAVEGACIÓN EN LOS MENUES
 Sobre el margen superior se encuentran las opciones:
@@ -48,3 +48,21 @@ En el caso de crear un cliente se debe completar los campos:
 En el caso de tener un usuario ya generado se debe ingresar con un mail y clave:
 -	Usuario Admin: paula Clave: probando1234
 -	Usuario standard: test Clave: probando1234
+
+El usuario para http://127.0.0.1:8000/admin/
+- Usuario: admin
+- Clave: probando1234
+
+
+## EXPLICACION DE LA DEMO EN VIDEO
+Vínculo para la demo: https://youtu.be/rAD3C_bGaTE
+El video comienza desde el log in. En donde se loguea el usuario “paula” el cual tiene permiso de administrador.
+- Al ingresar se puede ver la página con los diferentes Posts cargados. 
+- Se ingresa en el titulado “Ruta por la Costa Brava en coche …” donde se puede leer todo el post completo y se selecciona la opción “Editar post” 
+- Se habilita un espacio con los campos posibles para modificar. Se cambia el nombre del post y se le agrega “EDITADO”. 
+- Al hacer click en “Acerca de mi” se muestra una reseña del creador de la página.
+- Al hacer click en “Mi perfil” se muestran: Nombre, Apellido, mail, Contraseña, descripción, web y el botón para subir un avatar. 
+- Al hacer click en “Crear Post” se carga un post desde cero con Titulo, Subtitulo, texto e imagen. Al ir a inicio podemos visualizar que se cargó correctamente y luego al ingresar a leerlo completo indicamos la opción borrar. Esto nos lleva a una página en la que nos pide que confirmemos la acción de borrar el post. Al volver al inicio podemos comprobar que el post fue borrado correctamente. 
+- Al hacer click en “Desloguear” se muestra una leyenda de que el deslogueo se realizó con exito.
+- Se inicia sesión nuevamente con un perfil de “test” (no admin) en donde se puede ver que la opción “crear post” no se visualiza. Al hacer click en “Mi perfil” se muestran: Nombre, Apellido, mail, Contraseña, descripción, web y el botón para subir un avatar. Se prueba un cambio de avatar y luego se hace un deslogueo.
+- Por último se crea un nuevo usuario “test2” con perfil no admin. Se confirma y luego se prueba el inicio de sesión de ese nuevo usuario para validar el correcto funcionamiento.
