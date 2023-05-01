@@ -1,35 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from django.contrib.auth import get_user_model
-from .models import User
-from django.contrib.auth import authenticate
-
-User = get_user_model()
+from django.contrib.auth.models import User
 
 class CustomAuthenticationForm(AuthenticationForm):
-    #username = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Usuario', 'class': 'form-control form-control-lg'}))
-    #password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña', 'class': 'form-control form-control-lg'}))
-
     username = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Usuario', 'class': 'form-control form-control-lg'}))
     password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña', 'class': 'form-control form-control-lg'}))
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].label = False
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if username is not None and password:
-            self.user_cache = authenticate(self.request, username=username, password=password)
-            if self.user_cache is None:
-                raise self.get_invalid_login_error()
-            else:
-                self.confirm_login_allowed(self.user_cache)
-
-        return self.cleaned_data
-
 
 class UserRegisterForm(UserCreationForm):
     username = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Usuario','class': 'form-control mb-3'}))
@@ -59,9 +34,9 @@ class UserRegisterForm(UserCreationForm):
  
 class UserEditForm(UserChangeForm):
     password = None
-    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'placeholder': 'Email','class': 'form-control mb-3 h-full-width'}))
-    descripcion = forms.CharField(max_length=500, label="", widget=forms.EmailInput(attrs={'placeholder': 'Descripción','class': 'form-control mb-3 h-full-width'}))
-    web = forms.CharField(max_length=500, label="", widget=forms.EmailInput(attrs={'placeholder': 'Web','class': 'form-control mb-3 h-full-width'}))
+    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'placeholder': 'Email','class': 'form-control mb-3 h-full-width'}), required=False)
+    descripcion = forms.CharField(max_length=500, label="", widget=forms.TextInput(attrs={'placeholder': 'Descripción','class': 'form-control mb-3 h-full-width'}), required=False)
+    web = forms.CharField(max_length=500, label="", widget=forms.TextInput(attrs={'placeholder': 'Web','class': 'form-control mb-3 h-full-width'}), required=False)
     avatar = forms.ImageField(required=False)
 
     class Meta:

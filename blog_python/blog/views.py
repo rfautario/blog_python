@@ -5,15 +5,13 @@ from blog.models import BlogPost
 from .forms import BlogFormulario
 from datetime import datetime
 from django.shortcuts import get_object_or_404
-
+from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, DeleteView, CreateView
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-User = get_user_model()
+from django.views.generic.edit import UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
  
 # Create your views here.
+@login_required(login_url='/accounts/login/')
 def inicio (request):
     posts =  BlogPost.objects.all()
 
@@ -24,19 +22,21 @@ def inicio (request):
 def about (request):
     return render(request, "about.html")
 
-def blogpost(request):
+def blogpost (request):
     msg = ''
     if request.method == "POST":
         
-        form = BlogFormulario(request.POST, request.FILES, user=request.user)
+        form = BlogFormulario(request.POST, request.FILES)
 
         if form.is_valid():
             datos_correctos = form.cleaned_data
 
+            author = get_object_or_404(User, username= request.user.username)
+
             titulo = datos_correctos['titulo']
             subtitulo = datos_correctos['subtitulo']
             cuerpo = datos_correctos['cuerpo']
-            autor = datos_correctos['autor']
+            autor = author
             fecha = datetime.now()
             imagen = datos_correctos['imagen']
             
@@ -50,22 +50,12 @@ def blogpost(request):
         
             msg = 'Se ha registrado el posteo satisfactoriamente!'
     else:
-        form = BlogFormulario(user=request.user)
+        form = BlogFormulario()
         msg = ''
         
     context = {'form': form, 'message': msg}
 
     return render(request, "blog_post.html", context)
-
-class BlogCreate(LoginRequiredMixin, CreateView):
-    model = BlogPost
-    form_class = BlogFormulario
-    template_name = 'blog_post.html'
-
-    def form_valid(self, form):
-        form.instance.autor = self.request.user
-        return super().form_valid(form)
-
 
 class BlogView(DetailView):
     model = BlogPost

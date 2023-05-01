@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CustomAuthenticationForm, UserRegisterForm, UserEditForm
 from django.contrib.auth import login, logout, authenticate
-from usuarios.models import User
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .models import UserExtra
 
 # Create your views here.
 def login_request(request):
@@ -13,10 +14,12 @@ def login_request(request):
             usuario = form.cleaned_data.get('username')
             clave = form.cleaned_data.get('password')
 
-            user = authenticate(request, username=usuario, password=clave)
+            user = authenticate(username = usuario, password = clave)
 
             if user is not None:
                 login(request, user)
+                
+                UserExtra.objects.get_or_create(user=request.user)
 
                 return redirect('index')
             else:
@@ -41,7 +44,7 @@ def register (request):
 
             form.save()
 
-            return render(request, "/login.html", {"mensaje": "Usuario Creado"})
+            return render(request, "login.html", {"mensaje": "Usuario Creado"})
     else:
         form = UserRegisterForm()
 
@@ -61,19 +64,46 @@ def editUser (request):
     form = UserEditForm()
     return render(request, 'profile.html', {"form": form})
 
-# @login_required
-# def profile (request):
-#     if request.method == "POST":
-#         form = AvatarForm (request.POST, request.FILES)
+@login_required
+def profile (request):
+    if request.method == "POST":
+        form = UserEditForm (request.POST, request.FILES, instance=request.user)
 
-#         if form.is_valid():
-#             user = User.objects.get(username=request.user.username)
+        if form.is_valid():
+            #datos_correctos = form.cleaned_data
 
-#             avatar = AvatarForm (user = user, imagen = form.cleaned_data.get['imagen'])
-#             avatar.save()
+            # usuario = User.objects.get(username = request.user)
+            # usuario = get_object_or_404(User, username= request.user.username)
 
-#             return render(request, "/index")
-#     else:
-#         form = AvatarForm()
+            # descripcion = datos_correctos['descripcion']
+            # web = datos_correctos['web']
+            # avatar = datos_correctos['avatar']
+            
+            # userExtra = UserExtra(user = request.user,
+            #                       descripcion = descripcion,
+            #                       web = web,
+            #                       avatar = avatar)
+            # userExtra.save()
 
-#     return render(request, "profile", {"form": form})
+            request.user.userextra.web = form.cleaned_data.get('web')
+            request.user.userextra.descripcion = form.cleaned_data.get('descripcion')
+            if form.cleaned_data.get('avatar'):
+                request.user.userextra.avatar = form.cleaned_data.get('avatar')
+            
+            request.user.userextra.save()
+
+            form.save()
+            
+            mensaje = "Se han guardado los datos correctamente"
+
+            return render(request, "profile.html", {"form": form, "mensaje": mensaje})
+        else:
+            return render(request, 'profile.html', {'form': form})
+        
+    extra = {'avatar': request.user.userextra.avatar, 
+             'web': request.user.userextra.web,
+             'descripcion': request.user.userextra.descripcion,}
+            
+    form = UserEditForm(initial=extra, instance=request.user)
+
+    return render(request, 'profile.html', {'form': form})
