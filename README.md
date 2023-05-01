@@ -2,7 +2,7 @@
 Se deberá ingresar a la siguiente dirección: [127.0.0.1:8000/](http://127.0.0.1:8000/)
 La cual mostrará la página inicial de la web
 
-Vinculo para la demo: [https://youtu.be/rAD3C_bGaTE]https://youtu.be/rAD3C_bGaTE
+Vinculo para la demo: https://youtu.be/rAD3C_bGaTE
 
 ## NAVEGACIÓN EN LOS MENUES
 Sobre el margen superior se encuentran las opciones:
