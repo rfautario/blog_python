@@ -19,9 +19,11 @@ def inicio (request):
 
     return render(request, "index.html", context)
 
+@login_required(login_url='/accounts/login/')
 def about (request):
     return render(request, "about.html")
 
+@login_required(login_url='/accounts/login/')
 def blogpost (request):
     msg = ''
     if request.method == "POST":
