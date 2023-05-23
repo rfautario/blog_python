@@ -26,4 +26,5 @@ urlpatterns = [
     path('pages/', views.blogpost, name='blogpost'),
     path('pages/update/<int:pk>', login_required(views.BlogUpdate.as_view()), name='update_blog'),
     path('pages/delete/<int:pk>', login_required(views.BlogDelete.as_view()), name='delete_blog'),
+    path('messages/', views.messaging, name='messages'),
 ]

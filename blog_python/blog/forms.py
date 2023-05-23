@@ -1,5 +1,6 @@
 from django import forms
-from .models import BlogPost
+from .models import BlogPost, Message
+from django.contrib.auth.models import User
 from ckeditor.widgets import CKEditorWidget
 
 class BlogFormulario(forms.ModelForm):
@@ -11,3 +12,12 @@ class BlogFormulario(forms.ModelForm):
     class Meta:
         model = BlogPost
         exclude = ['autor', 'fecha']
+
+
+class MessageForm(forms.ModelForm):
+    recipient = forms.ModelChoiceField(queryset=User.objects.all(), label='Para', required= True)
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control mb-3 h-full-width'}), label='Mensaje', required= True)
+
+    class Meta:
+        model = Message
+        fields = ['recipient', 'content']
